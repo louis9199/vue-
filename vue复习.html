@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+    </head>
+    <body>
+        <div id="root">
+            <div>学习</div>
+            <span>{{study}}</span>
+            <input type="checkbox" :checked="tyboole">{{tyboole}}</input>
+           <div @click.capture="show()">
+            <div @click="show1()" style="width:100px;height:30px;background:yellow">内层</div>
+            <input type="button" value="点击" @click="clickEve($event)"></input>
+           </div>
+            <div v-for="item in studerobj" :key="item.age">
+                <span>姓名{{item.name}}</span>
+                <span>年龄{{item.age}}</span>
+                <input type="text" v-model="from" />
+            </div>
+
+            姓：<input type="text" v-model="firstName"><br><br>
+            名：<input type="text" v-model="lastName"><br><br>
+            姓名：<span>{{fullName}}</span>
+ 
+        </div>
+        <script type="text/javascript">
+            var vm = new Vue({
+                data: {
+                    study: '语文',
+                    tyboole:true,
+                    studerobj: [
+                        {name: 'zs', age: 15},
+                        {name: 'wr', age: 25},
+                        {name: 'lsi', age: 67}
+                    ],
+                    student:{
+                        a:1,b:2
+                    },
+                    from: '上海',
+                    firstName:'张',
+                    lastName:'三',
+                    num:100 
+                },
+                 methods:{
+                    clickEve(e){
+                        // tyboole=!tyboole
+                        // console.log('event',e);
+                        e.srcElement.style.background='green'
+                        e.srcElement.style.border='none'
+                        this.tyboole=!this.tyboole
+                        this.study='物理'
+                        this.num+=100
+                        this.student.a++
+                    },
+                    show(){
+                        // alert('警告一次')
+                    },
+                    show1(){
+                        // alert('警告二次')
+                    }
+                },
+                computed:{
+                    fullName:{
+                        get(){
+                            return this.firstName+'-'+this.lastName
+                        },
+                        set(value){
+                            const arr = value.split('-')
+						this.firstName = arr[0]
+						this.lastName = arr[1]
+                        }
+                    }
+                },
+                watch:{
+                    num:{
+                        immediate:true, //初始化时让handler调用一下
+                        handler(newValue,oldValue){
+                            console.log('isHot被修改了',newValue,oldValue)
+                        } 
+                    },
+                    student:{
+                        deep:true,
+                        handler1(e,f){
+                            console.log('e,f',e,f);
+                            
+                        }
+                    }
+                }
+            })
+            vm.$mount('#root')
+        </script>
+    </body>
+</html>
